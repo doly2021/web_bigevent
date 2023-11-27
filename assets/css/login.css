@@ -1,0 +1,62 @@
+/* login.css 文件：用于实现登录页面的样式 */
+
+@font-face {
+    font-family: 'icomoon';
+    src: url('icomoon.eot');
+    src: url('icomoon.eot#iefix') format('embedded-opentype'), url('icomoon.ttf') format('truetype'), url('icomoon.woff') format('woff'), url('icomoon.svg#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../images/login_bg.jpg);
+}
+
+.loginAndRegBox {
+    width: 400px;
+    height: 310px;
+    background-color: #fff;
+    /* 实现登录/注册框居中现实 */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title-box {
+    height: 60px;
+    background: url(../images/login_title.png) no-repeat center;
+}
+
+.reg-box {
+    /* 隐藏注册的div */
+    display: none;
+}
+
+.layui-form-item a {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.layui-form {
+    padding: 0px 30px;
+}
+
+.layui-form-item {
+    position: relative;
+}
+
+.layui-form-item i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.layui-form-item input {
+    padding-left: 32px;
+}
