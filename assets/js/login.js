@@ -1,13 +1,11 @@
 // 登录页面专用的JS文件：用于实现登录页面的网页行为实现
 
-
-// [1] 实现登录/注册表单的切换
 // jQuery的入口函数：等待DOM元素加载完成后再执行JS代码
 $(function() {
 
+    // [1] 实现登录/注册表单的切换
     //登录切换至注册
     $('.login-box a').on('click', function() {
-        // alert('login-box a被点击')
         $('.login-box').hide()
         $('.reg-box').show();
     })
@@ -22,7 +20,6 @@ $(function() {
     //[2] 自定义验证规则
     // 从 layui 中获取 form 对象
     var form = layui.form;
-
     var layer = layui.layer;
 
     // 通过 form.verify() 函数自定义校验规则
@@ -43,38 +40,59 @@ $(function() {
         }
     })
 
+
     // [3] 监听注册表单的提交事件
     $('#reg-form').on('submit', function(e) {
         //禁止默认的提交事件
         e.preventDefault();
-        //发起 ajax 的POST请求
-        $.post('/api/reguser', { username: $('#reg-form [name=username]').val(), password: $('#reg-form [name=password]').val() }, function(res) {
-            if (res.status != 0) {
-                return layer.alert(res.message)
-            }
-            layer.alert('注册成功！')
 
-            //注册成功会切换到登录页面
-            $('#gologin').click();
+        //发起 ajax 的POST请求
+        $.ajax({
+            type: 'post',
+            url: 'http://127.0.0.1:8080/api/reguser',
+            data: { username: $('#reg-form [name=username]').val(), password: $('#reg-form [name=password]').val() },
+            success: function(res) {
+                console.log(res);
+                if (res.status != 0) {
+                    return layer.alert('[注册失败] ' + res.message)
+                }
+
+                layer.alert('注册成功！');
+
+                //注册成功会切换到登录页面
+                $('#gologin').click();
+            }
         })
     })
 
-    // [4] 监听登录表单的提交操作
+
+
+    //[4] 监听登录表单的提交操作
     $('#login-form').on('submit', function(e) {
-        //禁止默认的表单提交行为
+        //阻止登录表单的提交行为
         e.preventDefault();
-        //发起 ajax 的GET请求
-        $.get('/api/login', { username: $('#reg-form [name=username]').val(), password: $('#reg-form [name=password]').val() }, function(res) {
-            if (res.status != 0) {
-                return layer.alert('登录失败！')
+
+        //发起ajax的POST请求
+        $.ajax({
+            type: 'post',
+            url: 'http://127.0.0.1:8080/api/login',
+            data: { username: $('#login-form [name=username]').val(), password: $('#login-form [name=password]').val() },
+            success: function(res) {
+
+                //登录失败的处理逻辑
+                if (res.status !== 0) {
+                    return layer.alert('[登录失败]：' + res.message);
+                }
+
+                //登录成功
+                console.log('登录成功！');
+
+                //将登陆成功得到的 token 字符串保存到 localStorage 中
+                localStorage.setItem('token', res.token);
+
+                //跳转到后台主页
+                location.href = '/index.html'
             }
-            layer.alert('登录成功！')
-
-            //将登陆成功得到的 token 字符串保存到 localStorage 中
-            localStorage.setItem('token', res.token);
-
-            //跳转到后台主页
-            location.href = '/index.html'
         })
     })
 })
